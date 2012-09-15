@@ -9,7 +9,22 @@ group :development, :test do
   gem 'rspec'
   gem 'fuubar'
 
-  gem 'guard-rspec'
-  gem 'guard-bundler'
-  gem 'growl'
+  unless ENV['TRAVIS']
+    gem 'guard-rspec'
+    gem 'guard-bundler'
+
+    gem 'ruby-debug', :platform => :mri_18
+    gem 'debugger',   :platform => :mri_19
+
+    require 'rbconfig'
+    if RbConfig::CONFIG['target_os'] =~ /darwin/i
+      gem 'rb-fsevent'
+      gem 'growl'
+    end
+    if RbConfig::CONFIG['target_os'] =~ /linux/i
+      gem 'rb-inotify'
+      gem 'libnotify'
+    end
+
+  end
 end
