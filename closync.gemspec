@@ -18,4 +18,6 @@ Gem::Specification.new do |gem|
   gem.name          = 'closync'
   gem.require_paths = ["lib"]
   gem.version       = Closync::VERSION
+
+  gem.add_dependency('fog')
 end

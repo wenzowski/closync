@@ -1,6 +1,8 @@
 require "closync/version"
 require "closync/config"
 
+require "closync/storage"
+
 module Closync
   class << self
     def config=(data)
