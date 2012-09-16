@@ -12,16 +12,30 @@ module Closync
     attr_accessor :branch
 
 
-    def initialize(path)
+    def initialize(opts={})
       self.credentials    = {}
       self.storage        = {}
       self.cache_control  = {}
       self.branch         = []
 
-      @yml_path = (path || "#{Dir.pwd}/.closync.yml")
+      @yml_path = ( opts[:yml_path] || "#{Dir.pwd}/.closync.yml" )
 
-      self.load_yml! if self.yml_exists?
+      if self.yml_exists?
+        load_yml!
+      else
+        raise "Config file not found at #{opts[:yml_path]}" if opts[:yml_path]
+      end
     end
+
+    def yml_path
+      @yml_path
+    end
+
+    def yml_exists?
+      File.exists?(self.yml_path)
+    end
+
+    private
 
     def load_yml!
       yml = read_yml
@@ -40,11 +54,7 @@ module Closync
     end
 
     def read_yml
-      YAML.load(ERB.new(IO.read(@yml_path)).result) rescue nil || {}
-    end
-
-    def yml_exists?
-      File.exists?(@yml_path)
+      YAML.load(ERB.new(IO.read(self.yml_path)).result) rescue nil || {}
     end
 
   end
