@@ -31,16 +31,16 @@ module Closync
     end
 
     def upload?(file)
-      upload = false
-      if ( remote_file = @remote.directory.files.head(file.key) )
-        if remote_file.last_modified < file.last_modified
-          # TODO(wenzowski): check etag to see if file has changed
-          upload = true # clobber remote file
-        end
-      else
-        upload = true
-      end
-      upload
+      # TODO(wenzowski): check if file already exists
+      #
+      # upload = false
+      # if ( remote_file = @remote.directory.files.head(file.key) )
+      #   # TODO(wenzowski): check etag to see if file has changed
+      # else
+      #   upload = true
+      # end
+      # upload
+      true
     end
 
     # If file already exists on remote it will be overwritten.
