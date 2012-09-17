@@ -24,16 +24,18 @@ destination to perform a one-way synchronization.
 **.closync.yml**
 
     credentials:
-      google_storage_access_key_id: ENV['GOOGLE_STORAGE_ACCESS_KEY_ID']
-      google_storage_secret_access_key: ENV['GOOGLE_STORAGE_SECRET_ACCESS_KEY']
+      google_storage_access_key_id: <%= ENV['GOOGLE_STORAGE_ACCESS_KEY_ID'] %>
+      google_storage_secret_access_key: <%= ENV['GOOGLE_STORAGE_SECRET_ACCESS_KEY'] %>
     storage:
       local:
         provider: 'Local'
-        directory: 'folder/name'
+        directory: 'relative/path'
       remote:
         provider: 'Google'
         directory: 'bucket_name'
-    cache-control:
+    branch:
+      - master
+    cache_control:
       300:
         - .htm
         - .html
