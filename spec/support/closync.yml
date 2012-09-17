@@ -3,11 +3,11 @@ credentials: # symbol names per fog gem
   google_storage_secret_access_key: <%= ENV['GOOGLE_STORAGE_SECRET_ACCESS_KEY'] || 'mock_secret' %>
 storage: # provider strings per fog gem
   local:
-    directory: 'folder/name'
     provider: 'Local'
+    directory: 'folder/name'
   remote:
-    directory: 'bucket_name'
     provider: 'Google'
+    directory: 'bucket_name'
 branch: # restrict push to git branch
   - master
 cache_control:

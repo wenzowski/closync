@@ -30,15 +30,21 @@ describe Closync::Config do
     it { subject.yml_exists?.should be_true }
 
     # Fog credentials
-    it { subject.credentials.keys.should == ['google_storage_access_key_id', 'google_storage_secret_access_key'] }
+    it { subject.credentials.keys.should == [:google_storage_access_key_id, :google_storage_secret_access_key] }
 
     # Remotes to interact with
-    it { subject.storage.keys.should == ['local', 'remote'] }
-    it { subject.storage['local'].keys.should == ['directory', 'provider'] }
-    it { subject.storage['remote'].keys.should == ['directory', 'provider'] }
+    it { subject.storage.keys.should == [:local, :remote] }
+    it { subject.local.keys.should == [:provider, :directory] }
+    it { subject.local[:provider].should == 'Local' }
+    it { subject.local[:directory].should == 'folder/name' }
+    it { subject.remote.keys.should == [:provider, :directory] }
+    it { subject.remote[:provider].should == 'Google' }
+    it { subject.remote[:directory].should == 'bucket_name' }
 
     #  Cache-Control headers
-    pending { subject.cache_control.should == {} }
+    it { subject.cache_control.should == {'.htm' => 300, '.html' => 300, 'default' => 3600} }
+    it { subject.max_age('.htm').should == 300 }
+    it { subject.max_age('.jpg').should == 3600 }
 
     # Git branch to check for before performing actions
     it { subject.branch.should == ['master'] }

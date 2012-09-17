@@ -1,5 +1,3 @@
-require 'erb'
-
 module Closync
   class Config
 
@@ -35,27 +33,88 @@ module Closync
       File.exists?(self.yml_path)
     end
 
+    def max_age(extension)
+      self.cache_control[extension] || self.cache_control['default'] ||
+        (raise 'No default max-age configured.')
+    end
+
+    def set_max_age!(extension, max_age)
+      self.cache_control[extension] = max_age
+    end
+
+    def local
+      storage[:local] || (raise 'No local storage configured.')
+    end
+
+    def local=(config={})
+      raise 'Config must include :provider and :directory.' unless
+        config.keys == [:provider, :directory]
+      storage[:local] = {}
+      storage[:local][:provider] = config[:provider]
+      storage[:local][:directory] = config[:directory]
+    end
+
+    def remote
+      storage[:remote] || (raise 'No remote storage configured.')
+    end
+
+    def remote=(config={})
+      raise 'Config must include :provider and :directory.' unless
+        config.keys == [:provider, :directory]
+      storage[:remote] = {}
+      storage[:remote][:provider] = config[:provider]
+      storage[:remote][:directory] = config[:directory]
+    end
+
     private
 
-    def load_yml!
-      yml = read_yml
-      yml['credentials'].each do |key, val|
-        self.credentials[key] = val
+      def load_yml!
+        read_yml!
+        set_credentials!
+        set_storage!
+        set_cache_control!
+        set_branch!
       end
-      yml['storage'].each do |key, val|
-        self.storage[key] = val
-      end
-      yml['cache_control'].each do |key, val|
-        self.cache_control[key] = val
-      end
-      yml['branch'].each do |branch|
-        self.branch << branch
-      end
-    end
 
-    def read_yml
-      YAML.load(ERB.new(IO.read(self.yml_path)).result) rescue nil || {}
-    end
+      def read_yml
+        YAML.load(ERB.new(IO.read(self.yml_path)).result) rescue nil || {}
+      end
+
+      def read_yml!
+        @yml = read_yml
+      end
+
+      def set_credentials!
+        self.credentials = {}
+        @yml['credentials'].each do |key, val|
+          self.credentials[key.to_sym] = val
+        end
+      end
+
+      def set_storage!
+        self.storage = {}
+        @yml['storage'].each do |remote, config|
+          self.storage[remote.to_sym] = {}
+          config.each do |key, val|
+            self.storage[remote.to_sym][key.to_sym] = val
+          end
+        end
+      end
+
+      def set_cache_control!
+        @yml['cache_control'].each do |max_age, extensions|
+          extensions.each do |extension|
+            set_max_age!(extension, max_age)
+          end
+        end
+      end
+
+      def set_branch!
+        self.branch = []
+        @yml['branch'].each do |branch|
+          self.branch << branch
+        end
+      end
 
   end
 end
