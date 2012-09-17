@@ -33,8 +33,6 @@ destination to perform a one-way synchronization.
       remote:
         provider: 'Google'
         directory: 'bucket_name'
-    branch:
-      - master
     cache_control:
       300:
         - .htm

@@ -88,7 +88,7 @@ module Closync
         self.credentials = {}
         @yml['credentials'].each do |key, val|
           self.credentials[key.to_sym] = val
-        end
+        end if @yml['credentials']
       end
 
       def set_storage!
@@ -97,23 +97,23 @@ module Closync
           self.storage[remote.to_sym] = {}
           config.each do |key, val|
             self.storage[remote.to_sym][key.to_sym] = val
-          end
-        end
+          end if config
+        end if @yml['storage']
       end
 
       def set_cache_control!
         @yml['cache_control'].each do |max_age, extensions|
           extensions.each do |extension|
             set_max_age!(extension, max_age)
-          end
-        end
+          end if extensions
+        end if @yml['cache_control']
       end
 
       def set_branch!
         self.branch = []
         @yml['branch'].each do |branch|
           self.branch << branch
-        end
+        end if @yml['branch']
       end
 
   end
