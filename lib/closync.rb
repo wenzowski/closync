@@ -1,7 +1,7 @@
-require "closync/version"
-require "closync/config"
-
-require "closync/storage"
+require 'closync/version'
+require 'closync/config'
+require 'closync/storage'
+require 'closync/sync'
 
 module Closync
   class << self
@@ -17,6 +17,10 @@ module Closync
     def configure(&proc)
       @config ||= Config.new
       yield @config
+    end
+
+    def push!
+      Sync.new(config).push!
     end
   end
 end
