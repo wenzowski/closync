@@ -1,0 +1,15 @@
+language: ruby
+rvm:
+  - 1.9.3
+env:
+  - [
+    # GOOGLE_STORAGE_ACCESS_KEY_ID
+    {secure: "GOJGnwF6G7u+K9WsZxcWX2H35QdnXNDS4UCJw9ekpEJk0ymmY685lUCmZqGD\nmkZAkJLql+T4oScaGVO7XjNTZnDXN/1NivYhPXtyPbgAtThMm0GPTKT3Kt/z\nxWdDurXqUg44YqEXuFJHOXdOkmNUZM5/4dqNfgW4vtlMzAB4Rw0="},
+    # GOOGLE_STORAGE_SECRET_ACCESS_KEY
+    {secure: "P9J9ss9mRBHmbHHKPZSZHuo7Rc2o9AJx7+7L4IUnvhssxGEiKu6Umov7LKMh\n5ibQH1oaW+JGlpVyqN7EioSMj/ahrZFjK5LAaWIbG5JsttVAgd/9gdUXDuNc\nUOEwLMg9PEOPD/Q1N7VO8SlHj7CuEMPBD2FX3vRJK1kgD2SHA4M="}
+
+    # AWS_ACCESS_KEY_ID
+    # AWS_SECRET_ACCESS_KEY
+  ]
+script:
+  - bundle exec rspec
