@@ -48,7 +48,7 @@ module Closync
       @remote.directory.files.create(
         key:            file.key,
         body:           file.body,
-        cache_control:  max_age(file),
+        cache_control:  "public, max-age=#{max_age(file)}",
         public:         true
       )
     end
