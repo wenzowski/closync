@@ -12,43 +12,42 @@ module Closync
     end
 
     def push!
-      push_new_data!
-      delete_old_data!
+      @local.directory.files.each do |local_file|
+        upload!(local_file) if stale_on_remote?(local_file)
+      end
+      @remote.directory.files.each do |remote_file|
+        remote_file.destroy unless exists_locally?(remote_file)
+      end
     end
 
     private
 
-    def push_new_data!
-      @local.directory.files.each do |file|
-        upload!(file) if upload?(file)
+
+    def exists_locally?(remote_file)
+      return true if @local.directory.files.head(remote_file.key)
+      false
+    end
+
+    # TODO(wenzowski): local_file.should.respond_to?(:content_md5)
+    def stale_on_remote?(local_file)
+      remote_file = @remote.directory.files.head(local_file.key)
+      return true unless remote_file # file is missing from remote, therefore stale
+      if remote_file.respond_to?(:content_md5) && local_file.respond_to?(:content_md5)
+        (
+          ( remote_file.content_length != local_file.content_length ) &&
+          ( remote_file.content_md5 != local_file.content_md5 )
+        )
+      else
+        ( remote_file.content_length != local_file.content_length )
       end
     end
 
-    def delete_old_data!
-      # @remote.directory.files.each do |file|
-      #   file.delete unless @local.directory.files.head(file)
-      # end
-    end
-
-    def upload?(file)
-      # TODO(wenzowski): check if file already exists
-      #
-      # upload = false
-      # if ( remote_file = @remote.directory.files.head(file.key) )
-      #   # TODO(wenzowski): check etag to see if file has changed
-      # else
-      #   upload = true
-      # end
-      # upload
-      true
-    end
-
     # If file already exists on remote it will be overwritten.
-    def upload!(file)
+    def upload!(local_file)
       @remote.directory.files.create(
-        key:            file.key,
-        body:           file.body,
-        cache_control:  "public, max-age=#{max_age(file)}",
+        key:            local_file.key,
+        body:           local_file.body,
+        cache_control:  "public, max-age=#{max_age(local_file)}",
         public:         true
       )
     end
