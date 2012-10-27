@@ -1,6 +1,8 @@
 module Closync
   class Config
 
+    attr_accessor :working_dir
+
     # Fog config
     attr_accessor :credentials
     attr_accessor :storage
@@ -9,14 +11,14 @@ module Closync
     # Git
     attr_accessor :branch
 
-
     def initialize(opts={})
-      self.credentials    = {}
-      self.storage        = {}
-      self.cache_control  = {}
-      self.branch         = []
+      self.credentials    = ( opts[:credentials]    || {} )
+      self.storage        = ( opts[:storage]        || {} )
+      self.cache_control  = ( opts[:cache_control]  || {} )
+      self.branch         = ( opts[:branch]         || [] )
+      self.working_dir    = ( opts[:working_dir]    || Dir.pwd)
 
-      @yml_path = ( opts[:yml_path] || "#{Dir.pwd}/.closync.yml" )
+      @yml_path = ( opts[:yml_path] || "#{self.working_dir}/.closync.yml" )
 
       if self.yml_exists?
         load_yml!

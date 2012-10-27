@@ -6,9 +6,9 @@ Gem::Specification.new do |gem|
   gem.email         = ["alexander@wenzowski.com"]
   gem.summary       = 'A tool for synchronizing cloud storage buckets.'
   gem.description   = <<-EOF
-    Closync is a cloud storage interaction tool designed to simplify
-    synchronization between multiple filesystems. It uses the fog gem
-    to interact with both local and remote storage.
+    A tool for deploying complete HTML Apps to S3-compatible object
+    storage. Cache-Control max-age headers are set based on file type.
+    Closync uses the fog gem to interact with both local and remote storage.
   EOF
   gem.homepage      = "http://github.com/wenzowski/closync"
 

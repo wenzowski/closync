@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/wenzowski/closync.png)](http://travis-ci.org/wenzowski/closync)
+
 # Closync
 
 Synchronizes local and cloud storage.
