@@ -4,15 +4,17 @@ module Closync
   class Storage
     attr_accessor :directory
 
+    ##
     # * config (<~object) Closync::Config
-    # * opts (<~dict) Options to initialize fog connection.
+    # * bucket_config (<~hash) Options to initialize fog connection.
     #   * :provider (<~string): Options are ['Local', 'AWS', 'Google', 'Rackspace']
     #   * :directory (<~string) Bucket or local directory.
-    def initialize(config, opts={})
+    def initialize(config, bucket_config={})
+      opts = bucket_config.clone
       dir = opts.delete(:directory)
       case opts[:provider]
       when 'Local'
-        opts[:local_root] = Dir.pwd
+        opts[:local_root] = config.working_dir
         @storage = Fog::Storage.new(opts)
       when 'AWS'
         opts[:aws_access_key_id] =

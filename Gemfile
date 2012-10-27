@@ -28,3 +28,8 @@ group :development, :test do
 
   end
 end
+
+group :development do
+  gem 'yard'
+  gem 'redcarpet'
+end
