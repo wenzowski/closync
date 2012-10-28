@@ -38,7 +38,7 @@ module Closync
           ( remote_file.content_md5 != local_file.content_md5 )
         )
       else
-        ( remote_file.content_length != local_file.content_length )
+        true # if we don't know, upload anyway
       end
     end
 
